@@ -7,20 +7,12 @@ import { Button } from "./components/ui/button";
 import PFPDropzone from "./components/ui/pfp-maker/dropzone";
 import PFPEditor from "./components/ui/pfp-maker/editor";
 import accessories from "./data/accessories";
-// import { generateImage, optimizePrompt } from "./lib/api";
 
 export type AccessoryItem = {
   id: string;
   name: string;
   variant: string;
   image: string;
-};
-
-export type GLIFResponse = {
-  id: string;
-  inputs: { node_6: string };
-  output: string;
-  outputFull: {};
 };
 
 function App() {
@@ -37,15 +29,8 @@ function App() {
     AccessoryItem[]
   >([]);
 
-  // const [AIInput, setAIInput] = React.useState<string>("");
-  // const [imageGenerationRunning, setimageGenerationRunning] =
-  //   React.useState<boolean>(false);
-  // const [promptOpitmizationRunning, setPromptOpitmizationRunning] =
-  //   React.useState<boolean>(false);
-  // const [AIImage, setAIImage] = React.useState<string | null>(null);
-
   const handleDropzoneDrop = React.useCallback((acceptedFiles: File[]) => {
-    var reader = new FileReader();
+    const reader = new FileReader();
     reader.onload = (event: ProgressEvent<FileReader>) => {
       if (event.target !== null && event.target.result !== null) {
         setPFP(event.target.result as string);
@@ -68,7 +53,7 @@ function App() {
         });
       }
     },
-    [PFP, activeAccesories]
+    [PFP, activeAccesories, accessoryPool]
   );
 
   const handleDeleteClick = React.useCallback(
@@ -106,38 +91,7 @@ function App() {
         position: "bottom-center",
       });
     }
-  }, [PFP, containerRef, editorActive]);
-
-  // const handleAIInputChange = React.useCallback(
-  //   (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-  //     setAIInput(event.target.value);
-  //   },
-  //   []
-  // );
-
-  // const handlePromptptimizationClick = React.useCallback(
-  //   async (e: React.MouseEvent<HTMLButtonElement>) => {
-  //     e.preventDefault();
-  //     console.log("optimize", AIInput);
-  //     setPromptOpitmizationRunning(true);
-  //     const result: GLIFResponse = await optimizePrompt(AIInput);
-  //     setAIInput(result.output);
-  //     setPromptOpitmizationRunning(false);
-  //   },
-  //   [AIInput]
-  // );
-
-  // const handleImageGenerationClick = React.useCallback(
-  //   async (e: React.FormEvent<HTMLFormElement>) => {
-  //     e.preventDefault();
-  //     console.log("generate", AIInput);
-  //     setimageGenerationRunning(true);
-  //     const result: GLIFResponse = await generateImage(AIInput);
-  //     setAIImage(result.output);
-  //     setimageGenerationRunning(false);
-  //   },
-  //   [AIInput]
-  // );
+  }, [PFP, containerRef]);
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen space-y-4">
@@ -198,40 +152,6 @@ function App() {
         <Button onClick={handleClearClick}>Clear</Button>
         <Button onClick={handleDownloadClick}>Download</Button>
       </div>
-      {/* <div className="container flex max-w-2xl mx-auto">
-        <form onSubmit={handleImageGenerationClick} className="w-full">
-          <div className="relative">
-            <textarea
-              className="w-full py-2 pl-2 pr-12 border border-gray-400 rounded"
-              rows={7}
-              value={AIInput}
-              onChange={handleAIInputChange}
-            ></textarea>
-            <Button
-              className="absolute z-10 h-auto p-2 top-2 right-2"
-              disabled={!AIInput || AIInput === ""}
-              title="Optimize this prompt"
-              onClick={handlePromptptimizationClick}
-            >
-              {promptOpitmizationRunning ? (
-                <LoaderCircle className="w-4 h-4 animate-spin" />
-              ) : (
-                <Sparkles className="w-4 h-4" />
-              )}
-            </Button>
-          </div>
-          <Button className="block" disabled={imageGenerationRunning}>
-            {imageGenerationRunning ? (
-              <span>
-                <LoaderCircle className="w-4 h-4 animate-spin" />
-              </span>
-            ) : (
-              <span>Generate</span>
-            )}
-          </Button>
-        </form>
-      </div> */}
-      {/* {AIImage && <img src={AIImage} className="w-full" />} */}
       <Toaster />
     </main>
   );
