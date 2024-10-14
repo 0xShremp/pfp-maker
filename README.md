@@ -34,3 +34,17 @@ If you are developing a production application, we recommend updating the config
 ## License 📄
 
 [MIT License](https://github.com/moinulmoin/vite-react-tailwind-starter/blob/master/LICENSE)
+
+## GLIF API
+
+When working locally, GLIF API gives CORS errors.
+
+Install `lcp`:
+
+`npm install -g local-cors-proxy`
+
+Start the proxy server with:
+
+`lcp --proxyUrl https://simple-api.glif.app`
+
+You should be good to go.
