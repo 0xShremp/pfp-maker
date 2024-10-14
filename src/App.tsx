@@ -25,9 +25,12 @@ function App() {
   const [accessoryPool] = React.useState<{ [string: string]: AccessoryItem }>(
     accessories
   );
-  const [activeAccesories, setActiveAccesories] = React.useState<
+  const [activeAccessories, setActiveAccesories] = React.useState<
     AccessoryItem[]
   >([]);
+  const [latestAccessory, setLatestAccessory] = React.useState<string | null>(
+    null
+  );
 
   const handleDropzoneDrop = React.useCallback((acceptedFiles: File[]) => {
     const reader = new FileReader();
@@ -42,9 +45,11 @@ function App() {
   const handleAddClick = React.useCallback(
     (id: string) => {
       if (PFP) {
+        const uniqueid = uuid();
+        setLatestAccessory(uniqueid);
         setActiveAccesories([
-          ...activeAccesories,
-          { ...accessoryPool[id], id: uuid() },
+          ...activeAccessories,
+          { ...accessoryPool[id], id: uniqueid },
         ]);
       } else {
         toast("Please add a PFP before adding stuff.", {
@@ -53,15 +58,15 @@ function App() {
         });
       }
     },
-    [PFP, activeAccesories, accessoryPool]
+    [PFP, activeAccessories, accessoryPool]
   );
 
   const handleDeleteClick = React.useCallback(
     (id: string) => {
       console.log("delete", id);
-      setActiveAccesories(activeAccesories.filter((a) => a.id !== id));
+      setActiveAccesories(activeAccessories.filter((a) => a.id !== id));
     },
-    [activeAccesories]
+    [activeAccessories]
   );
 
   const handleClearClick = React.useCallback(() => {
@@ -148,11 +153,12 @@ function App() {
             {PFP && (
               <div className="relative w-full h-full">
                 <PFPEditor active={editorActive} onDelete={handleDeleteClick}>
-                  {activeAccesories.map((ai) => (
+                  {activeAccessories.map((ai) => (
                     <div
                       key={ai.id}
                       id={ai.id}
                       className="absolute inline-block w-auto item"
+                      style={{ transform: "translateX(20px) translateY(20px)" }}
                     >
                       <img src={ai.image} />
                     </div>

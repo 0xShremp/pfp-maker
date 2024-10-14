@@ -6,6 +6,7 @@ import Selecto from "react-selecto";
 export interface PFPEditorProps {
   active?: boolean;
   children?: React.ReactNode;
+  newTargets: React.ReactNode;
   onDelete: (id: string) => void;
 }
 
@@ -22,7 +23,7 @@ const CustomAble = {
         key={"editable-viewer"}
         className="absolute top-0 left-0 origin-top-left moveable-editable will-change-transform"
         style={{
-          transform: `translate(${pos2[0]}px, ${pos2[1]}px) rotate(${rect.rotation}deg) translate(10px)`,
+          transform: `translate(${pos2[0]}px, ${pos2[1]}px) rotate(${rect.rotation}deg)`,
         }}
       >
         <button
@@ -50,9 +51,24 @@ const PFPEditor = ({
   onDelete,
   children = null,
 }: PFPEditorProps) => {
+  console.log(children);
   const [targets, setTargets] = React.useState<Array<SVGElement | HTMLElement>>(
     []
   );
+
+  React.useEffect(() => {
+    console.log("children changed");
+    const c = React.Children.toArray(children).pop();
+    if (c) {
+      const id = (c as { props: any }).props.id;
+      setTargets([document.getElementById(id)!]);
+      console.log("child");
+    }
+
+    // setTargets(document.getElementById(children[children]));
+  }, [children]);
+
+  console.log(targets);
 
   const selectoRef = React.useRef<Selecto>(null);
   const moveableRef = React.useRef<Moveable>(null);
