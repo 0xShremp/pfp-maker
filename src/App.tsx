@@ -7,7 +7,7 @@ import { Button } from "./components/ui/button";
 import PFPDropzone from "./components/ui/pfp-maker/dropzone";
 import PFPEditor from "./components/ui/pfp-maker/editor";
 import accessories from "./data/accessories";
-import { generateImage, optimizePrompt } from "./lib/api";
+// import { generateImage, optimizePrompt } from "./lib/api";
 
 export type AccessoryItem = {
   id: string;
@@ -37,12 +37,12 @@ function App() {
     AccessoryItem[]
   >([]);
 
-  const [AIInput, setAIInput] = React.useState<string>("");
-  const [imageGenerationRunning, setimageGenerationRunning] =
-    React.useState<boolean>(false);
-  const [promptOpitmizationRunning, setPromptOpitmizationRunning] =
-    React.useState<boolean>(false);
-  const [AIImage, setAIImage] = React.useState<string | null>(null);
+  // const [AIInput, setAIInput] = React.useState<string>("");
+  // const [imageGenerationRunning, setimageGenerationRunning] =
+  //   React.useState<boolean>(false);
+  // const [promptOpitmizationRunning, setPromptOpitmizationRunning] =
+  //   React.useState<boolean>(false);
+  // const [AIImage, setAIImage] = React.useState<string | null>(null);
 
   const handleDropzoneDrop = React.useCallback((acceptedFiles: File[]) => {
     var reader = new FileReader();
@@ -108,36 +108,36 @@ function App() {
     }
   }, [PFP, containerRef, editorActive]);
 
-  const handleAIInputChange = React.useCallback(
-    (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setAIInput(event.target.value);
-    },
-    []
-  );
+  // const handleAIInputChange = React.useCallback(
+  //   (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  //     setAIInput(event.target.value);
+  //   },
+  //   []
+  // );
 
-  const handlePromptptimizationClick = React.useCallback(
-    async (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault();
-      console.log("optimize", AIInput);
-      setPromptOpitmizationRunning(true);
-      const result: GLIFResponse = await optimizePrompt(AIInput);
-      setAIInput(result.output);
-      setPromptOpitmizationRunning(false);
-    },
-    [AIInput]
-  );
+  // const handlePromptptimizationClick = React.useCallback(
+  //   async (e: React.MouseEvent<HTMLButtonElement>) => {
+  //     e.preventDefault();
+  //     console.log("optimize", AIInput);
+  //     setPromptOpitmizationRunning(true);
+  //     const result: GLIFResponse = await optimizePrompt(AIInput);
+  //     setAIInput(result.output);
+  //     setPromptOpitmizationRunning(false);
+  //   },
+  //   [AIInput]
+  // );
 
-  const handleImageGenerationClick = React.useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      console.log("generate", AIInput);
-      setimageGenerationRunning(true);
-      const result: GLIFResponse = await generateImage(AIInput);
-      setAIImage(result.output);
-      setimageGenerationRunning(false);
-    },
-    [AIInput]
-  );
+  // const handleImageGenerationClick = React.useCallback(
+  //   async (e: React.FormEvent<HTMLFormElement>) => {
+  //     e.preventDefault();
+  //     console.log("generate", AIInput);
+  //     setimageGenerationRunning(true);
+  //     const result: GLIFResponse = await generateImage(AIInput);
+  //     setAIImage(result.output);
+  //     setimageGenerationRunning(false);
+  //   },
+  //   [AIInput]
+  // );
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen space-y-4">
