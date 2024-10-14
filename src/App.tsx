@@ -80,7 +80,8 @@ function App() {
     if (PFP) {
       if (containerRef.current) {
         setEditorActive(false);
-        toPng(containerRef.current).then(function (dataUrl) {
+        buildPNG(containerRef.current).then(function (dataUrl) {
+          console.log(dataUrl.length);
           download(dataUrl, "pfp.png");
         });
         setEditorActive(true);
@@ -93,10 +94,42 @@ function App() {
     }
   }, [PFP, containerRef]);
 
+  const buildPNG = async (contentToPrint: HTMLDivElement) => {
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    let dataUrl = "";
+    let i = 0;
+    let maxAttempts;
+    if (isSafari) {
+      maxAttempts = 5;
+    } else {
+      maxAttempts = 1;
+    }
+    let cycle = [];
+    let repeat = true;
+
+    while (repeat && i < maxAttempts) {
+      dataUrl = await toPng(contentToPrint, {
+        fetchRequestInit: {
+          cache: "no-cache",
+        },
+        skipAutoScale: true,
+        includeQueryParams: true,
+        pixelRatio: isSafari ? 1 : 3,
+        quality: 1,
+        style: { paddingBottom: "100px" },
+      });
+      i += 1;
+      cycle[i] = dataUrl.length;
+
+      if (dataUrl.length > cycle[i - 1]) repeat = false;
+    }
+    return dataUrl;
+  };
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen space-y-4">
-      <div className="container max-w-2xl mx-auto">
-        <div className="flex flex-row w-full overflow-hidden border rounded-xl border-slate-300">
+      <div className="container max-w-2xl p-2 mx-auto">
+        <div className="flex flex-col w-full overflow-hidden border rounded-xl border-slate-300">
           <div
             ref={containerRef}
             className="relative w-full overflow-hidden bg-white aspect-square"
@@ -109,7 +142,7 @@ function App() {
             {PFP && (
               <img
                 src={PFP}
-                className="absolute inset-0 z-0 w-full h-full pixelated"
+                className="absolute inset-0 z-0 object-cover w-full h-full pixelated"
               />
             )}
             {PFP && (
@@ -128,23 +161,22 @@ function App() {
               </div>
             )}
           </div>
-          <div className="relative w-24 bg-gray-200">
-            <div className="absolute inset-0 h-full p-2 space-y-2 overflow-x-hidden overflow-y-scroll border-l border-slate-300">
-              {Object.values(accessoryPool).map((a) => (
-                <button
-                  onClick={() => {
-                    handleAddClick(a.id);
-                  }}
-                  key={a.id}
-                >
-                  <img
-                    src={a.image}
-                    className="object-contain w-full aspect-square"
-                  />
-                  <span className="text-sm">{a.name}</span>
-                </button>
-              ))}
-            </div>
+          <div className="flex flex-row justify-center w-full p-2 space-x-4 overflow-x-scroll overflow-y-hidden bg-gray-200">
+            {Object.values(accessoryPool).map((a) => (
+              <button
+                onClick={() => {
+                  handleAddClick(a.id);
+                }}
+                className="flex flex-col items-center"
+                key={a.id}
+              >
+                <img
+                  src={a.image}
+                  className="object-contain h-16 aspect-square"
+                />
+                <span className="text-sm">{a.name}</span>
+              </button>
+            ))}
           </div>
         </div>
       </div>

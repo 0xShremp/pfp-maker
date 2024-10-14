@@ -20,7 +20,7 @@ const PFPDropzone = ({ onDrop }: PFPDropzoneProps) => {
   return (
     <div
       {...getRootProps()}
-      className="flex items-center justify-center w-full h-full p-16 cursor-pointer"
+      className="flex items-center justify-center w-full h-full p-4 cursor-pointer md:p-16"
     >
       <div
         className={twMerge(
