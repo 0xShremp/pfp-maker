@@ -28,9 +28,6 @@ function App() {
   const [activeAccessories, setActiveAccesories] = React.useState<
     AccessoryItem[]
   >([]);
-  const [latestAccessory, setLatestAccessory] = React.useState<string | null>(
-    null
-  );
 
   const handleDropzoneDrop = React.useCallback((acceptedFiles: File[]) => {
     const reader = new FileReader();
@@ -46,7 +43,6 @@ function App() {
     (id: string) => {
       if (PFP) {
         const uniqueid = uuid();
-        setLatestAccessory(uniqueid);
         setActiveAccesories([
           ...activeAccessories,
           { ...accessoryPool[id], id: uniqueid },
@@ -87,7 +83,7 @@ function App() {
         setEditorActive(false);
         buildPNG(containerRef.current).then(function (dataUrl) {
           console.log(dataUrl.length);
-          download(dataUrl, "pfp.png");
+          download(dataUrl, "gizmoed.png", "image/png");
         });
         setEditorActive(true);
       }

@@ -6,7 +6,6 @@ import Selecto from "react-selecto";
 export interface PFPEditorProps {
   active?: boolean;
   children?: React.ReactNode;
-  newTargets: React.ReactNode;
   onDelete: (id: string) => void;
 }
 
@@ -23,7 +22,7 @@ const CustomAble = {
         key={"editable-viewer"}
         className="absolute top-0 left-0 origin-top-left moveable-editable will-change-transform"
         style={{
-          transform: `translate(${pos2[0]}px, ${pos2[1]}px) rotate(${rect.rotation}deg)`,
+          transform: `translate(${pos2[0]}px, ${pos2[1]}px) rotate(${rect.rotation}deg) translateX(8px)`,
         }}
       >
         <button
@@ -61,11 +60,10 @@ const PFPEditor = ({
     const c = React.Children.toArray(children).pop();
     if (c) {
       const id = (c as { props: any }).props.id;
-      setTargets([document.getElementById(id)!]);
-      console.log("child");
+      setTimeout(() => {
+        setTargets([document.getElementById(id)!]);
+      }, 50);
     }
-
-    // setTargets(document.getElementById(children[children]));
   }, [children]);
 
   console.log(targets);
@@ -99,6 +97,8 @@ const PFPEditor = ({
             rotationPosition={"top"}
             // PINCH
             pinchable={true}
+            pinchOutside={true}
+            pinchThreshold={200}
             // EVENTS
             onDragOrigin={(e) => {
               e.target.style.transformOrigin = e.transformOrigin;
